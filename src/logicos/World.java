@@ -11,6 +11,7 @@ public class World {
   private List<Logico> logicos;
   private int tick;
   private int firstTurn;
+  private List<String> history;
 
   public World(int size, int nLogicos, int maxStrength) {
     tick = 0;
@@ -18,6 +19,7 @@ public class World {
     map = new Entity[size][size];
     this.size = size;
     logicos = new ArrayList<>();
+    history = new LinkedList<>();
 
 
     // Place [nLogicos] amount of Logicos randomly around the map
@@ -32,6 +34,7 @@ public class World {
       logicos.add((Logico) map[x][y]);
       --nLogicos;
     }
+    history.add(this.toString());
   }
 
   public void setLocation(Location location, Entity entity) {
@@ -70,10 +73,10 @@ public class World {
       logico = logicos.get(turn);
       logico.advance(getSurroundings(logico)).perform(this);
       turn = (turn + 1) % population();
-      ++tick;
-      //display();
     }
+    ++tick;
     firstTurn = (firstTurn + 1) % population();
+    history.add(this.toString());
   }
 
   public int population() {
@@ -102,17 +105,25 @@ public class World {
     return map[x][y];
   }
 
-  public void display() {
-    System.out.println(tick);
+  @Override
+  public String toString() {
+    StringBuilder world = new StringBuilder();
     for (int x = 0; x != size; ++x) {
       for (int y = 0; y != size; ++y) {
         if (map[x][y] == null)
-          System.out.printf("- "); // represent empty locations as -
+          world.append("- "); // represent empty locations as -
         else if (map[x][y] instanceof Logico)
-          System.out.printf(((Logico) map[x][y]).getStrength() + " "); // represent logicos as their strength
+          world.append(((Logico) map[x][y]).getStrength()).append(" "); // represent logicos as their strength
       }
-      System.out.printf("\n");
+      world.append("\n");
     }
+    return world.toString();
+  }
+
+  public String getOldWorld(int tick) {
+    if (tick < 0 || tick >= history.size())
+      throw new IndexOutOfBoundsException();
+    return history.get(tick);
   }
 
   public static void main(String[] args) {
@@ -120,6 +131,45 @@ public class World {
     while (world.population() > 1) {
       world.advance();
     }
+
     System.out.println("[*] Simulation finished in " + world.getTick() + " ticks.");
+    System.out.println("[*] Type help for a list of commands");
+    Scanner input = new Scanner(System.in);
+    String command = input.nextLine();
+    boolean output = false;
+    int tick = 0;
+    while (!command.equals("quit")) {
+      try {
+        tick = Integer.parseInt(command);
+        output = true;
+      } catch (NumberFormatException e) {
+        switch (command) {
+          case ",": // backwards
+            --tick;
+            output = true;
+            break;
+          case ".": // forwards
+            ++tick;
+            output = true;
+            break;
+          case "help":
+            System.out.println("Enter an integer to observe the world at that tick.");
+            System.out.println("Enter ',' to observe the previous world state.");
+            System.out.println("Enter '.' to observe the next world state.");
+            output = false;
+            break;
+          default:
+            System.out.println("[!] Invalid command, type 'help' for more information.");
+            output = false;
+        }
+      }
+      if (output)
+        try {
+          System.out.println("Tick " + tick + ":\n" + world.getOldWorld(tick));
+        } catch (IndexOutOfBoundsException e) {
+          System.out.println("[!] No world exists for tick " + tick + ".");
+        }
+      command = input.nextLine();
+    }
   }
 }
