@@ -116,7 +116,7 @@ public class World {
         if (map[x][y] == null)
           world.append(" - "); // represent empty locations as -
         else if (map[x][y] instanceof Logico)
-          world.append(String.format("%3s", ((Logico) map[x][y]).getHealth())); // represent logicos as their health
+          world.append(String.format("%3s", ((Logico) map[x][y]).getWealth())); // represent logicos as their health
       }
       world.append("\n");
     }
