@@ -40,7 +40,7 @@ public class World {
       ((Logico) entity).setLocation(location); // TODO: can we avoid redundant storing of location ?
   }
 
-  public List<Entity> getSurroundings(Logico logico) { // TODO: inverse logic to remove continues
+  public List<Entity> getSurroundings(Logico logico) {
     List<Entity> surroundings = new LinkedList<>();
     Location location = logico.getLocation();
     int xLoc = location.getX();
@@ -48,19 +48,17 @@ public class World {
     int curRow, curCol;
     for (int rowOffset = -1; rowOffset <= 1; ++rowOffset) {
       curRow = xLoc + rowOffset;
-      if (curRow < 0 || curRow >= size) // i.e if we are looking out of the map (past top / bottom)
-        continue;
-      for (int colOffset = -1; colOffset <= 1; ++colOffset) {
-        curCol = yLoc + colOffset;
-        if (rowOffset == 0 && colOffset == 0) // i.e if we are looking at the logico's location
-          continue;
-        if (curCol < 0 || curCol >= size) // i.e if we are looking out of the map (past left / right)
-          continue;
-        if (map[curRow][curCol] == null)
-          surroundings.add(new Location(curRow, curCol)); // TODO: should we represent empty tiles as null or an entity?
-        else
-          surroundings.add(map[curRow][curCol]);
-      }
+      if (curRow >= 0 && curRow < size) // i.e we are not looking out of the map (past top / bottom)
+        for (int colOffset = -1; colOffset <= 1; ++colOffset) {
+          curCol = yLoc + colOffset;
+          // if (we're not looking at the logico) && (we're not looking out of the map, past left / right)
+          if (!(rowOffset == 0 && colOffset == 0) && (curCol >= 0 && curCol < size)) {
+            if (map[curRow][curCol] == null) // if we're looking at an empty tile
+              surroundings.add(new Location(curRow, curCol)); // TODO: should we represent empty tiles as null or an entity?
+            else
+              surroundings.add(map[curRow][curCol]);
+          }
+        }
     }
     return surroundings;
   }
