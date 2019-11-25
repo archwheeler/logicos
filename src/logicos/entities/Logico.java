@@ -18,7 +18,7 @@ public class Logico extends Entity {
   }
 
   public Action advance(List<Entity> surroundings) { // TODO: make most 'logical' decision
-    List<Location> possibleMoves = new LinkedList<>();
+    List<Location> possibleMoves = new LinkedList<>(); // keep track of empty tiles as potential move locations
     for (Entity entity : surroundings) {
       if (entity instanceof Logico) { // TODO: can we get rid of ugly typecasts?
         if (((Logico) entity).getStrength() <= strength)
@@ -28,8 +28,12 @@ public class Logico extends Entity {
         possibleMoves.add((Location) entity);
     }
 
-    if (possibleMoves.size() > 0) // if we can, move in a random direction
-      return new Move(this, possibleMoves.get((new Random()).nextInt(possibleMoves.size()))); // TODO: clean this
+    if (possibleMoves.size() > 0) {
+      Random r = new Random();
+      // Choose a random location from the reachable locations in possibleMoves
+      Location destination = possibleMoves.get(r.nextInt(possibleMoves.size()));
+      return new Move(this, destination);
+    }
 
     return new Skip(); // if we can't make a move, stay put
   }
