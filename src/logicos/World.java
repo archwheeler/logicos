@@ -112,9 +112,9 @@ public class World {
     for (int x = 0; x != size; ++x) {
       for (int y = 0; y != size; ++y) {
         if (map[x][y] == null)
-          world.append("- "); // represent empty locations as -
+          world.append(" - "); // represent empty locations as -
         else if (map[x][y] instanceof Logico)
-          world.append(((Logico) map[x][y]).getHealth()).append(" "); // represent logicos as their health
+          world.append(String.format("%3s", ((Logico) map[x][y]).getHealth())); // represent logicos as their health
       }
       world.append("\n");
     }
