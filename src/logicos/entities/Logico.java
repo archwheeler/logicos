@@ -23,16 +23,19 @@ public class Logico extends Entity {
 
   public Action advance(List<Entity> surroundings) { // TODO: make most 'logical' decision
     List<Location> possibleMoves = new LinkedList<>(); // keep track of empty tiles as potential move locations
+    Logico target = null;
     for (Entity entity : surroundings) {
       if (entity instanceof Logico) { // TODO: can we get rid of ugly typecasts?
-        if (((Logico) entity).getStrength() <= strength)
-          return new Attack(this, (Logico) entity);
+        if (target == null || ((Logico) entity).getWealth() < target.getWealth())
+          target = (Logico) entity;
       }
       else if (entity instanceof Location)
         possibleMoves.add((Location) entity);
     }
 
-    if (possibleMoves.size() > 0) {
+    if (target != null)
+      return new Attack(this, target);
+    else if (possibleMoves.size() > 0) {
       Random r = new Random();
       // Choose a random location from the reachable locations in possibleMoves
       Location destination = possibleMoves.get(r.nextInt(possibleMoves.size()));
