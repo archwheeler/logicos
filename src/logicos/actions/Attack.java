@@ -5,6 +5,8 @@ import logicos.entities.Logico;
 import logicos.exceptions.EntityNotPresent;
 import logicos.exceptions.OutOfWorld;
 
+import java.util.Random;
+
 public class Attack extends Action {
   private Logico attacker;
   private Logico victim;
@@ -16,8 +18,12 @@ public class Attack extends Action {
 
   @Override
   public void perform(World world) {
-    int victimNewStrength = victim.getStrength() - attacker.getStrength();
-    if (victimNewStrength <= 0) // The attacker has killed the victim
+    Random r = new Random();
+    // Damage is sampled from a normal distribution with mean=strength and variance=inaccuracy
+    int damage = (int) Math.round(attacker.getAccuracy() * r.nextGaussian() + attacker.getStrength());
+    if (damage < 0)
+      damage = 0;
+    if (victim.damage(damage) <= 0) // The attacker has killed the victim
       try {
         world.removeEntity(victim.getLocation());
         attacker.addWealth(1 + victim.getWealth()); // +1 wealth for the kill as well as stealing the victim's wealth
@@ -26,7 +32,5 @@ public class Attack extends Action {
       } catch (OutOfWorld outOfWorld) {
         System.err.println("[!] Attempt made to attack a logico located outside of the map.");
       }
-    else
-      victim.setStrength(victimNewStrength);
   }
 }

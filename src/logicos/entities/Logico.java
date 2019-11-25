@@ -7,13 +7,15 @@ import java.util.List;
 import java.util.Random;
 
 public class Logico extends Entity {
+  private int health;
   private int strength;
   private double accuracy;
   private int wealth;
   private Location location; // The logico's location
 
-  public Logico(int strength, double accuracy, Location location) {
+  public Logico(int strength, double accuracy, Location location, int health) {
     wealth = 0;
+    this.health = health;
     this.location = location;
     this.accuracy = accuracy;
     this.strength = strength;
@@ -52,12 +54,24 @@ public class Logico extends Entity {
     return location;
   }
 
+  public double getAccuracy() {
+    return accuracy;
+  }
+
+  public int getHealth() {
+    return health;
+  }
+
   public void setLocation(Location location) {
     this.location = location;
   }
 
   public void setStrength(int strength) {
     this.strength = strength;
+  }
+
+  public int damage(int damage) {
+    return this.health -= damage; // return new health
   }
 
   public void addWealth(int wealth) { this.wealth += wealth; }

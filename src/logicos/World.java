@@ -30,7 +30,8 @@ public class World {
         x = r.nextInt(size);
         y = r.nextInt(size);
       }
-      map[x][y] = new Logico(r.nextInt(maxStrength) + 1, r.nextDouble() * maxInaccuracy, new Location(x, y)); // Generate random strength
+      map[x][y] = new Logico(r.nextInt(maxStrength) + 1, r.nextDouble() * maxInaccuracy,
+                              new Location(x, y), 100); // Generate random strength
       logicos.add((Logico) map[x][y]);
       --nLogicos;
     }
@@ -113,7 +114,7 @@ public class World {
         if (map[x][y] == null)
           world.append("- "); // represent empty locations as -
         else if (map[x][y] instanceof Logico)
-          world.append(((Logico) map[x][y]).getStrength()).append(" "); // represent logicos as their strength
+          world.append(((Logico) map[x][y]).getHealth()).append(" "); // represent logicos as their health
       }
       world.append("\n");
     }
