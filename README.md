@@ -3,11 +3,12 @@
 A simulation of logical creatures called Logicos.
 
 ## Current state
-The world consists of Logicos and empty tiles.  
-Logicos can move, attack or skip their turn.  
-Logicos will attack the Logico with the greatest wealth within their range otherwise they will move in a random direction, skipping their turn if there are no possible moves.  
-Logicos gain 1 wealth per kill as well as stealing the wealth of their victim.  
-The world can be viewed round by round through a simple command line interface.
+### Entities
+Logicos
+### Actions
+Move, Attack, Skip  
+### Algorithm
+If there are other Logicos nearby, attack the one with the greatest wealth. Otheriwse, if there are any free tiles, move randomly. If there are no free tiles, do nothing.
 
 ## Goals
 * More Entities / Actions
