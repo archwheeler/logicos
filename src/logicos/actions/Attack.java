@@ -1,3 +1,10 @@
+package logicos.actions;
+
+import logicos.World;
+import logicos.entities.Logico;
+import logicos.exceptions.EntityNotPresent;
+import logicos.exceptions.OutOfWorld;
+
 public class Attack extends Action {
   private Logico attacker;
   private Logico victim;

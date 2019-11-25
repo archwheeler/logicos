@@ -1,3 +1,7 @@
+package logicos.entities;
+
+import logicos.actions.*;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;

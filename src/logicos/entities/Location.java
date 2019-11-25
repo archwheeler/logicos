@@ -1,3 +1,5 @@
+package logicos.entities;
+
 public class Location extends Entity {
   private int x;
   private int y;

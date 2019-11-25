@@ -1,3 +1,8 @@
+package logicos;
+
+import logicos.entities.*;
+import logicos.exceptions.*;
+
 import java.util.*;
 
 public class World {

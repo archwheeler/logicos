@@ -1,3 +1,11 @@
+package logicos.actions;
+
+import logicos.World;
+import logicos.entities.Location;
+import logicos.entities.Logico;
+import logicos.exceptions.EntityIsPresent;
+import logicos.exceptions.OutOfWorld;
+
 public class Move extends Action {
   Logico logico;
   Location destination;
