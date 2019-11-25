@@ -127,7 +127,13 @@ public class World {
   }
 
   public static void main(String[] args) {
-    World world = new World(10, 5, 9); // Default world constants
+    World world;
+    try {
+      world = new World(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+    } catch (NumberFormatException | IndexOutOfBoundsException e) {
+      System.out.println("[!] Arguments: [world size] [number of logicos] [maximum strength]");
+      return;
+    }
     while (world.population() > 1) {
       world.advance();
     }
