@@ -54,7 +54,7 @@ public class World {
           // if (we're not looking at the logico) && (we're not looking out of the map, past left / right)
           if (!(rowOffset == 0 && colOffset == 0) && (curCol >= 0 && curCol < size)) {
             if (map[curRow][curCol] == null) // if we're looking at an empty tile
-              surroundings.add(new Location(curRow, curCol)); // TODO: should we represent empty tiles as null or an entity?
+              surroundings.add(new Location(curRow, curCol));
             else
               surroundings.add(map[curRow][curCol]);
           }
