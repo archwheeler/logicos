@@ -13,7 +13,7 @@ public class World {
   private int firstTurn;
   private List<String> history;
 
-  public World(int size, int nLogicos, int maxStrength) {
+  public World(int size, int nLogicos, int maxStrength, double maxInaccuracy) {
     tick = 0;
     firstTurn = 0;
     map = new Entity[size][size];
@@ -30,7 +30,7 @@ public class World {
         x = r.nextInt(size);
         y = r.nextInt(size);
       }
-      map[x][y] = new Logico(r.nextInt(maxStrength) + 1, new Location(x, y)); // Generate random strength
+      map[x][y] = new Logico(r.nextInt(maxStrength) + 1, r.nextDouble() * maxInaccuracy, new Location(x, y)); // Generate random strength
       logicos.add((Logico) map[x][y]);
       --nLogicos;
     }
@@ -129,9 +129,9 @@ public class World {
   public static void main(String[] args) {
     World world;
     try {
-      world = new World(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+      world = new World(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Double.parseDouble(args[3]));
     } catch (NumberFormatException | IndexOutOfBoundsException e) {
-      System.out.println("[!] Arguments: [world size] [number of logicos] [maximum strength]");
+      System.out.println("[!] Arguments: [world size] [number of logicos] [maximum strength] [maximum inaccuracy]");
       return;
     }
     while (world.population() > 1) {

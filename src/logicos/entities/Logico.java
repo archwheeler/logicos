@@ -8,12 +8,14 @@ import java.util.Random;
 
 public class Logico extends Entity {
   private int strength;
+  private double accuracy;
   private int wealth;
   private Location location; // The logico's location
 
-  public Logico(int strength, Location location) {
+  public Logico(int strength, double accuracy, Location location) {
     wealth = 0;
     this.location = location;
+    this.accuracy = accuracy;
     this.strength = strength;
   }
 
