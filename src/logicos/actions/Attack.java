@@ -20,7 +20,6 @@ public class Attack extends Action {
     if (victimNewStrength <= 0) // The attacker has killed the victim
       try {
         world.removeEntity(victim.getLocation());
-        // TODO: should attacker now move to victim's location (like chess) ?
       } catch (EntityNotPresent entityNotPresent) {
         System.err.println("[!] Attempt made to attack non-existant logico.");
       } catch (OutOfWorld outOfWorld) {
