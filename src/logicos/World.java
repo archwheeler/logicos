@@ -4,6 +4,7 @@ import logicos.entities.*;
 import logicos.exceptions.*;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class World {
   private Entity[][] map;
@@ -109,6 +110,7 @@ public class World {
   @Override
   public String toString() {
     StringBuilder world = new StringBuilder();
+    world.append("Tick " + tick + ":\n");
     for (int x = 0; x != size; ++x) {
       for (int y = 0; y != size; ++y) {
         if (map[x][y] == null)
@@ -143,39 +145,59 @@ public class World {
     System.out.println("[*] Type help for a list of commands");
     Scanner input = new Scanner(System.in);
     String command = input.nextLine();
-    boolean output = false;
+    int output = 0;
     int tick = 0;
     while (!command.equals("quit")) {
-      try {
-        tick = Integer.parseInt(command);
-        output = true;
-      } catch (NumberFormatException e) {
-        switch (command) {
-          case ",": // backwards
-            --tick;
-            output = true;
-            break;
-          case ".": // forwards
-            ++tick;
-            output = true;
-            break;
-          case "help":
-            System.out.println("Enter an integer to observe the world at that tick.");
-            System.out.println("Enter ',' to observe the previous world state.");
-            System.out.println("Enter '.' to observe the next world state.");
-            output = false;
-            break;
-          default:
-            System.out.println("[!] Invalid command, type 'help' for more information.");
-            output = false;
+      if (command.startsWith("run")) {
+        try {
+          output = Integer.parseInt(command.split(" ")[1]);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+          System.out.println("[!] Usage: run [x]");
+          output = 0;
+        }
+      } else {
+        try {
+          tick = Integer.parseInt(command);
+          output = 1;
+        } catch (NumberFormatException e) {
+          switch (command) {
+            case ",": // backwards
+              --tick;
+              output = 1;
+              break;
+            case ".": // forwards
+              ++tick;
+              output = 1;
+              break;
+            case "help":
+              System.out.println("Enter an integer to observe the world state at that tick.");
+              System.out.println("Enter ',' to observe the previous world state.");
+              System.out.println("Enter '.' to observe the next world state.");
+              System.out.println("Enter 'run x' to observe the next x world states.");
+              System.out.println("Enter 'quit' to end the program.");
+              output = 0;
+              break;
+            default:
+              System.out.println("[!] Invalid command, type 'help' for more information.");
+              output = 0;
+          }
         }
       }
-      if (output)
+      while (output > 0) {
         try {
-          System.out.println("Tick " + tick + ":\n" + world.getOldWorld(tick));
+          System.out.println(world.getOldWorld(tick));
         } catch (IndexOutOfBoundsException e) {
           System.out.println("[!] No world exists for tick " + tick + ".");
+          break;
         }
+        ++tick;
+        --output;
+        try {
+          TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+          continue;
+        }
+      }
       command = input.nextLine();
     }
   }
