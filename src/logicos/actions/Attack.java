@@ -20,6 +20,7 @@ public class Attack extends Action {
     if (victimNewStrength <= 0) // The attacker has killed the victim
       try {
         world.removeEntity(victim.getLocation());
+        attacker.addWealth(1 + victim.getWealth()); // +1 wealth for the kill as well as stealing the victim's wealth
       } catch (EntityNotPresent entityNotPresent) {
         System.err.println("[!] Attempt made to attack non-existant logico.");
       } catch (OutOfWorld outOfWorld) {

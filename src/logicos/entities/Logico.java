@@ -53,4 +53,6 @@ public class Logico extends Entity {
   public void setStrength(int strength) {
     this.strength = strength;
   }
+
+  public void addWealth(int wealth) { this.wealth += wealth; }
 }
